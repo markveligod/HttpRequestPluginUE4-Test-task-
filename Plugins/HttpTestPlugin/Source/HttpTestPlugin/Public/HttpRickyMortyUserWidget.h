@@ -10,13 +10,13 @@
 class UImage;
 class UTextBlock;
 /**
- * 
+ *
  */
 UCLASS()
 class HTTPTESTPLUGIN_API UHttpRickyMortyUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "UHttpRickyMortyUserWidget")
 	void SetupWidgetText(const FInfoData& InfoData);
@@ -46,7 +46,4 @@ private:
 	// Image size for DownloadImage
 	UPROPERTY(EditDefaultsOnly, Category = "Settings image")
 	FVector2D ImageSize{200.0f, 200.0f};
-	
 };
-
-

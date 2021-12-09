@@ -9,25 +9,25 @@
 #include "NodeRequestBlueprintAsync.generated.h"
 
 class FHttpModule;
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHTTPRequestStatus, FInfoData, SomeData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHTTPRequestStatusSignature, FInfoData, SomeData);
 
 /**
- * 
+ *
  */
 UCLASS()
 class HTTPTESTPLUGIN_API UNodeRequestBlueprintAsync : public UBlueprintAsyncActionBase
 {
 	GENERATED_BODY()
-	
+
 public:
-	UFUNCTION(BlueprintCallable, meta=(BlueprintInternalUseOnly="true"))
+	UFUNCTION(BlueprintCallable, meta = (BlueprintInternalUseOnly = "true"))
 	static UNodeRequestBlueprintAsync* RequestRickyMorty();
-	
-	UPROPERTY(BlueprintAssignable)
-	FHTTPRequestStatus OnSuccess;
 
 	UPROPERTY(BlueprintAssignable)
-	FHTTPRequestStatus OnFail;
+	FHTTPRequestStatusSignature OnSuccess;
+
+	UPROPERTY(BlueprintAssignable)
+	FHTTPRequestStatusSignature OnFail;
 
 	void Start();
 
@@ -36,7 +36,7 @@ public:
 
 private:
 	FInfoData InfoData;
-	
+
 	// Download texture status - success
 	UFUNCTION()
 	void DownloadSuccess(UTexture2DDynamic* Texture);
@@ -44,6 +44,4 @@ private:
 	// Download texture status - fail
 	UFUNCTION()
 	void DownloadFail(UTexture2DDynamic* Texture);
-
-	
 };
