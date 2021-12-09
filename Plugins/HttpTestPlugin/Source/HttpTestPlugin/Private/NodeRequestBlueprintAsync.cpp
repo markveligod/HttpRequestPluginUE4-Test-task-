@@ -49,37 +49,30 @@ void UNodeRequestBlueprintAsync::HandleRequest(FHttpRequestPtr HttpRequest, FHtt
 	// Deserialize the json data given Reader and the actual object to deserialize
 	if (FJsonSerializer::Deserialize(Reader, JsonObject))
 	{
-		// Get the value of the json object by field id and name
-		this->InfoData.RecievedId = JsonObject->GetIntegerField("id");
-		this->InfoData.ReceivedName = JsonObject->GetStringField("name");
-		this->InfoData.ReceivedStatus = JsonObject->GetStringField("status");
-		this->InfoData.ReceivedSpecies = JsonObject->GetStringField("species");
-		this->InfoData.ReceivedType = JsonObject->GetStringField("type");
-		this->InfoData.ReceivedGender = JsonObject->GetStringField("gender");
-		this->InfoData.ReceivedURL = JsonObject->GetStringField("url");
-		this->InfoData.ReceivedCreated = JsonObject->GetStringField("created");
-
-		const FString ReceivedImage = JsonObject->GetStringField("image");
+		// Get the value of the json object by field
+		InfoData.Parse(JsonObject);
 		UAsyncTaskDownloadImage* DownloadTask = NewObject<UAsyncTaskDownloadImage>();
 		DownloadTask->OnSuccess.AddDynamic(this, &UNodeRequestBlueprintAsync::DownloadSuccess);
 		DownloadTask->OnFail.AddDynamic(this, &UNodeRequestBlueprintAsync::DownloadFail);
-		DownloadTask->Start(ReceivedImage);
+		DownloadTask->Start(InfoData.ImageURL);
 	}
 	else
+	{
 		this->OnFail.Broadcast(this->InfoData);
+	}
 }
 
 void UNodeRequestBlueprintAsync::DownloadSuccess(UTexture2DDynamic* Texture)
 {
 	UE_LOG(LogNodeRequestBlueprintAsync, Display, TEXT("Image download Success"));
-	this->InfoData.Texture = Texture;
-	this->OnSuccess.Broadcast(this->InfoData);
+	InfoData.Texture = Texture;
+	OnSuccess.Broadcast(InfoData);
 }
 
 void UNodeRequestBlueprintAsync::DownloadFail(UTexture2DDynamic* Texture)
 {
 	UE_LOG(LogNodeRequestBlueprintAsync, Error, TEXT("Image download Fail"));
 
-	this->InfoData.Texture = Texture;
-	this->OnFail.Broadcast(this->InfoData);
+	InfoData.Texture = Texture;
+	OnFail.Broadcast(InfoData);
 }
