@@ -10,4 +10,4 @@ All operations for requesting data to the server and processing them must be per
 - Make the node asynchronous
 - Display both text information and an image with a character
 ## Result
-(soon)
+![](https://github.com/markveligod/HttpTestPlugin/blob/main/Img/result.gif)
